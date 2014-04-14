@@ -1,0 +1,4 @@
+aStringAttr,anIntAttr,aNullableIntAttr,aFloatAttr,aNullableFloatAttr
+"Some String In Quotes",42,43,44.4,45.5
+A string not in quotes,51,0,55.5,0.0
+'Can I use single quotes?',60,61,62.2,63.3
