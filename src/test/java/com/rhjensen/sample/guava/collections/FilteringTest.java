@@ -1,10 +1,12 @@
 package com.rhjensen.sample.guava.collections;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Range;
 import com.rhjensen.sample.domain.Dish;
 import com.rhjensen.sample.domain.util.Menus;
 import com.rhjensen.sample.guava.predicates.DishKindPredicate;
 import com.rhjensen.sample.guava.predicates.LowFatPredicate;
+import com.rhjensen.sample.guava.predicates.LowFatRangePredicate;
 import org.junit.Test;
 
 import java.util.List;
@@ -53,6 +55,8 @@ public class FilteringTest {
     public void shouldReturnListOfLowFatDishesBasedOnSpecifiedValueWithNonZeroCalories() {
         // Some of the items in Menus.CHILIS_MENU are zero-calorie. They may not be what we mean by 'low-fat'.
         // Find the number of items with non-zero calories with % calories < 25% and < 33%
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, new LowFatRangePredicate(Range.open(0.0, 25.0)))).size(), is(10));
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, new LowFatRangePredicate(Range.open(0.0, 33.0)))).size(), is(17));
     }
 
     @Test
