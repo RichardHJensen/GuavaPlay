@@ -3,6 +3,7 @@ package com.rhjensen.sample.guava.collections;
 import com.google.common.base.Predicate;
 import com.rhjensen.sample.domain.Dish;
 import com.rhjensen.sample.domain.util.Menus;
+import com.rhjensen.sample.guava.predicates.LowFatPredicate;
 import org.junit.Test;
 
 import java.util.List;
@@ -42,6 +43,8 @@ public class FilteringTest {
         // Write a filter that will find 'low-fat' items in the menu (Menus.CHILIS_MENU).
         // For this definition of 'low-fat', % of calories from fat should be specified as a parameter
         // Run the test for 35% and 40%
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, new LowFatPredicate(35.0))).size(), is(36));
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, new LowFatPredicate(40.0))).size(), is(46));
     }
 
     @Test
