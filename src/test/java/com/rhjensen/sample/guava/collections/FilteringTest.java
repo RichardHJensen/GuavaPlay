@@ -3,11 +3,13 @@ package com.rhjensen.sample.guava.collections;
 import com.google.common.base.Predicate;
 import com.rhjensen.sample.domain.Dish;
 import com.rhjensen.sample.domain.util.Menus;
+import com.rhjensen.sample.guava.predicates.DishKindPredicate;
 import com.rhjensen.sample.guava.predicates.LowFatPredicate;
 import org.junit.Test;
 
 import java.util.List;
 
+import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.is;
@@ -56,6 +58,8 @@ public class FilteringTest {
     @Test
     public void shouldReturnListOfLowFatEntrees() {
         // This time let's only look at the Entrees
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, and(new LowFatPredicate(35.0), new DishKindPredicate("Entree")))).size(), is(10));
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, and(new DishKindPredicate("Entree"), new LowFatPredicate(40.0)))).size(), is(15));
     }
 
     @Test
