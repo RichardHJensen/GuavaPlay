@@ -1,10 +1,13 @@
 package com.rhjensen.sample.guava.collections;
 
+import com.google.common.base.Predicate;
 import com.rhjensen.sample.domain.Dish;
+import com.rhjensen.sample.domain.util.Menus;
 import org.junit.Test;
 
 import java.util.List;
 
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -19,9 +22,19 @@ public class FilteringTest {
     public void shouldReturnListOfLowFatDishes() {
         // Write a filter that will find 'low-fat' items in the menu (Menus.CHILIS_MENU).
         // For this definition of 'low-fat', % of calories from fat should be < 30%
-        List<Dish> lowFatItems = newArrayList();
+        List<Dish> lowFatItems = newArrayList(filter(Menus.CHILIS_MENU, new Predicate<Dish>() {
 
-        assertThat(lowFatItems.size(), is(0)); // Check the spreadsheet for the correct value
+            @Override
+            public boolean apply(Dish dish) {
+                double percentage = 0.0;
+                if (dish.getCalories() != 0) {
+                    percentage = (dish.getFatCalories() * 100.0) / dish.getCalories();
+                }
+                return percentage < 30.0;
+            }
+        }));
+
+        assertThat(lowFatItems.size(), is(28)); // Check the spreadsheet for the correct value
     }
 
     @Test
