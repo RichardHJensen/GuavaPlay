@@ -5,6 +5,7 @@ import com.google.common.collect.Range;
 import com.rhjensen.sample.domain.Dish;
 import com.rhjensen.sample.domain.util.Menus;
 import com.rhjensen.sample.guava.predicates.DishKindPredicate;
+import com.rhjensen.sample.guava.predicates.DishOfKindsPredicate;
 import com.rhjensen.sample.guava.predicates.LowFatPredicate;
 import com.rhjensen.sample.guava.predicates.LowFatRangePredicate;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.google.common.base.Predicates.and;
+import static com.google.common.base.Predicates.or;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.is;
@@ -71,5 +73,13 @@ public class FilteringTest {
         // What's in a name?
         // How about including Burgers, Sandwiches, and Pizzas as well as Entrees (but not Child meals)
         // (And maybe we should go up to < 50% so we can find something to eat?)
+        Predicate<Dish> kindsOfMainMeals = or(new DishKindPredicate("Burger"), new DishKindPredicate("Entree"), new DishKindPredicate("Pizza"),
+                new DishKindPredicate("Sandwich"));
+        Predicate<Dish> rangeOfFatPct = new LowFatRangePredicate(Range.open(0.0, 50.0));
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, and(rangeOfFatPct, kindsOfMainMeals))).size(), is(51));
+
+        // Or we can push the multiple kinds of Dish into one new predicate
+        Predicate<Dish> mealsReadyToEat = new DishOfKindsPredicate("Burger", "Entree", "Pizza", "Sandwich");
+        assertThat(newArrayList(filter(Menus.CHILIS_MENU, and(rangeOfFatPct, mealsReadyToEat))).size(), is(51));
     }
 }
